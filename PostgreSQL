@@ -1,0 +1,37 @@
+CREATE TABLE kafedra ( id serial PRIMARY KEY, title varchar (60) NOT NULL, decanat varchar (130) NOT NULL ); 
+CREATE TABLE groups ( id serial PRIMARY KEY, title varchar (90) NOT NULL, kafedra varchar (130) NOT NULL, fk_groups_kafedra int REFERENCES kafedra (id) ); 
+CREATE TABLE students ( id serial PRIMARY KEY, namess varchar (180) NOT NULL, passport_dan int NOT NULL, groups varchar (55) NOT NULL, fk_students_groups int REFERENCES groups(id) );
+
+INSERT INTO kafedra (title, decanat) VALUES ('Информатика и вычислительная техника', 'Информацинные технологии'); 
+INSERT INTO kafedra (title, decanat) VALUES ('Прикладная информатика', 'Информационные технологии');
+
+INSERT INTO groups (title, kafedra, fk_groups_kafedra) VALUES ('БВТ01', 'Информационные технилогии', 1); 
+INSERT INTO groups (title, kafedra, fk_groups_kafedra) VALUES ('БВТ02', 'Информационные технилогии', 1); 
+INSERT INTO groups (title, kafedra, fk_groups_kafedra) VALUES ('ИнфТех01', 'Информационные технилогии', 2); 
+INSERT INTO groups (title, kafedra, fk_groups_kafedra) VALUES ('ИнфТех02', 'Информационные технилогии', 2);
+
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Зенкин.М', 00000, 'БВТ01', 1); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Иванов.А', 11111, 'БВТ01', 1); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Кайчук.М', 22222, 'БВТ01', 1); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Богданова.Е', 33333, 'БВТ01', 1); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Недопекин.В', 44444, 'БВТ01', 1); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Фролова.М', 55555, 'БВТ02', 2); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Коршунов.Е', 66666, 'БВТ02', 2); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Филимонов.И', 77777, 'БВТ02', 2); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Найданова.Э', 88888, 'БВТ02', 2); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Ковалевский.С', 99999, 'БВТ02', 2); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Белов.Е', 10010, 'ИнфТех01', 3); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Глебов.А', 11011, 'ИнфТех01', 3); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Дзускаева.А', 12012, 'ИнфТех01', 3); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Кудинов.А', 13013, 'ИнфТех01', 3); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Майгер.А', 14014, 'ИнфТех01', 3); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Осин.А', 15015, 'ИнфТех02', 4); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Серов.Е', 16016, 'ИнфТех02', 4); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Шкилева.В', 17017, 'ИнфТех02', 4); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Юрьев.Д', 18018, 'ИнфТех02', 4); 
+INSERT INTO students (namess, passport_dan, groups, fk_students_groups) VALUES ('Гусев.П', 19019, 'ИнфТех02', 4);
+
+
+
+
+
