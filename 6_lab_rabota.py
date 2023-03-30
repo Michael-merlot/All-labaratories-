@@ -156,4 +156,4 @@ app = QApplication(sys.argv)
 win = Calculator()
 win.show()
 
-sys.exit(app.exec_())
+
