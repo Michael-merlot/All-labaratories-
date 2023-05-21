@@ -1,0 +1,270 @@
+import telebot
+from telebot import types
+import psycopg2
+import datetime
+
+conn = psycopg2.connect(database="postgres",
+                        user="postgres",
+                        password="qwerty123",
+                        host="localhost",
+                        port="5432")
+cursor = conn.cursor()
+
+token = '5901823522:AAEHUvYkaD9ky6kLYwc3rbSOJaiNMVIVZu4'
+bot = telebot.TeleBot(token)
+
+
+@bot.message_handler(commands=['start'])
+def start(message):
+    keyboard = types.ReplyKeyboardMarkup()
+    keyboard.row("/help", "/расписание_на_четную_неделю", "/расписание_на_нечетную_неделю", "/расписание",
+                 "/номер_недели")
+    bot.send_message(message.chat.id, 'Привет! Хочешь узнать свежую информацию о МТУСИ?', reply_markup=keyboard)
+
+
+@bot.message_handler(func=lambda msg: msg.text.lower() == '/help')
+def start_message(message):
+    bot.send_message(message.chat.id, ' Описание команд:  \n'
+                                      '/расписание - данная команда позволяет узнать расписание на все дни недели.'
+                                      '/расписание_на_четную_неделю - данная команда позволяет узнать расписание на '
+                                      'четную неделю \n '
+                                      '/расписание_на_нечетную_неделю - данная команда позволяет узнать расписание на '
+                                      'нечетную неделю \n '
+                                      '/номер_недели - данная команда позволяет узнать номер недели \n')
+
+
+@bot.message_handler(func=lambda msg: msg.text.lower() == '/номер_недели')
+def numb(message):
+    week_number = datetime.datetime.today().isocalendar()[1]
+    week = datetime.date(2022, 1, 31).isocalendar()[1]
+    week_new = week_number - week + 1
+    if week_new % 2 == 0:
+        bot.send_message(message.chat.id, f"Сейчас {week_new} четная, неделя")
+    else:
+        bot.send_message(message.chat.id, f" Сейчас {week_new} неделя, нечетная ")
+
+
+@bot.message_handler(func=lambda msg: msg.text.lower() == '/расписание_на_четную_неделю')
+def weeks2(message):
+    cursor.execute("SELECT * FROM monday2")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Понедельник---\n" + summa)
+
+    cursor.execute("SELECT * FROM tuesday2")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Втроник---\n" + summa)
+
+    cursor.execute("SELECT * FROM wednesday2")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Среда---\n" + summa)
+
+    cursor.execute("SELECT * FROM thursday2")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Четверг---\n" + summa)
+
+    cursor.execute("SELECT * FROM friday2")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Пятница---\n" + summa)
+
+    cursor.execute("SELECT * FROM saturday2")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Суббота---\n" + summa)
+
+
+@bot.message_handler(func=lambda msg: msg.text.lower() == '/расписание_на_нечетную_неделю')
+def weeks2(message):
+    cursor.execute("SELECT * FROM monday1")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Понедельник---\n" + summa)
+
+    cursor.execute("SELECT * FROM tuesday1")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Вторник---\n" + summa)
+
+    cursor.execute("SELECT * FROM wednesday1")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Среда---\n" + summa)
+
+    cursor.execute("SELECT * FROM thursday1")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Четверг---\n" + summa)
+
+    cursor.execute("SELECT * FROM friday1")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Пятница---\n" + summa)
+
+    cursor.execute("SELECT * FROM saturday1")
+    summa = ''
+    for records in (cursor.fetchall()):
+        summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                  f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+    bot.send_message(message.chat.id, "---Суббота---\n" + summa)
+
+
+@bot.message_handler(func=lambda msg: msg.text.lower() == '/расписание')
+def weeks(message):
+    markup = types.InlineKeyboardMarkup()
+
+    switch_button1 = types.InlineKeyboardButton(text='Понедельник', callback_data="first")
+    switch_button2 = types.InlineKeyboardButton(text='Вторник', callback_data="first1")
+    switch_button3 = types.InlineKeyboardButton(text='Среда', callback_data="first2")
+    switch_button4 = types.InlineKeyboardButton(text='Четверг', callback_data="first3")
+    switch_button5 = types.InlineKeyboardButton(text='Пятница', callback_data="first4")
+    switch_button6 = types.InlineKeyboardButton(text='Суббота', callback_data="first5")
+
+    markup.add(switch_button1, switch_button2, switch_button3, switch_button4, switch_button5, switch_button6)
+    bot.send_message(message.chat.id, "Нечетная неделя. Выберите день, по которому хотите узнать расписание:",
+                     reply_markup=markup)
+
+    markup1 = types.InlineKeyboardMarkup()
+
+    switchbutton1 = types.InlineKeyboardButton(text='Понедельник', callback_data="fir0")
+    switchbutton2 = types.InlineKeyboardButton(text='Вторник', callback_data="fir1")
+    switchbutton3 = types.InlineKeyboardButton(text='Среда', callback_data="fir2")
+    switchbutton4 = types.InlineKeyboardButton(text='Четверг', callback_data="fir3")
+    switchbutton5 = types.InlineKeyboardButton(text='Пятница', callback_data="fir4")
+    switchbutton6 = types.InlineKeyboardButton(text='Суббота', callback_data="fir5")
+
+    markup1.add(switchbutton1, switchbutton2, switchbutton3, switchbutton4, switchbutton5, switchbutton6)
+    bot.send_message(message.chat.id, " Четная неделя. Выберите день, по которому хотите узнать расписание: ",
+                     reply_markup=markup1)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def call_handler(call):
+    if call.data == "first":
+        cursor.execute("SELECT * FROM monday1")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Понедельник---\n" + summa)
+
+    elif call.data == "fir0":
+        cursor.execute("SELECT * FROM monday2")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Понедельник---\n" + summa)
+
+    elif call.data == "first1":
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Вторник---\n" + summa)
+    elif call.data == "fi1":
+        cursor.execute("SELECT * FROM tuesday2")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Вторник---\n" + summa)
+
+    elif call.data == "first2":
+        cursor.execute("SELECT * FROM wednesday1")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Среда---\n" + summa)
+    elif call.data == "fir2":
+        cursor.execute("SELECT * FROM wednesday2")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Среда---\n" + summa)
+
+    elif call.data == "first3":
+        cursor.execute("SELECT * FROM thursday1")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Четверг---\n" + summa)
+    elif call.data == "fir3":
+        cursor.execute("SELECT * FROM thursday1")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Четверг---\n" + summa)
+    elif call.data == "first4":
+        cursor.execute("SELECT * FROM friday1")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Пятница---\n" + summa)
+
+    elif call.data == "fir4":
+        cursor.execute("SELECT * FROM friday2")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Пятница---\n" + summa)
+
+    elif call.data == "first5":
+        cursor.execute("SELECT * FROM saturday1")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Суббота---\n" + summa)
+
+    elif call.data == "fir5":
+        cursor.execute("SELECT * FROM saturday2")
+        summa = ''
+        for records in (cursor.fetchall()):
+            summa += (f"Предмет: {records[2]}\n" f"Кабинет: {records[3]}\n"
+                      f"Время: {records[4]} \n " f"Преподаватель: {records[5]} \n"  f"Тип: {records[6]} \n")
+        bot.send_message(call.message.chat.id, "---Суббота---\n" + summa)
+
+
+@bot.message_handler(content_types=['text'])
+def answer(message):
+    if message.text.lower() == "да":
+        bot.send_message(message.chat.id, 'Тогда тебе сюда - https://mtuci.ru/')
+    elif message.text.lower() == "нет":
+        bot.send_message(message.chat.id, 'Вы меня расстроили...')
+    else:
+        bot.send_message(message.chat.id, 'Прошу прощения, но я не понимаю вашего запроса')
+
+
+bot.polling(none_stop=True, interval=0)
